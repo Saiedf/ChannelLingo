@@ -1,6 +1,6 @@
 {
   "status": "SUCCESS",
-  "run": "Build_03_11_2026_UTC_10_00",
+  "run": "Build_03_11_2026_UTC_15_56",
   "profile": "mips",
   "python_targets": [
     "2.7"
@@ -9,10 +9,10 @@
   "source": "/mnt/c/Users/S-PC/Desktop/SubExtractor/ChannelLingo/ChannelLingo",
   "source_inventory": {
     "__init__.py": "1cf4781036a758d0b7dec4d4212cf80cfbefb2085e0866bb564d968b4b9e06a9",
-    "audiopack.py": "ed056652ccaddd95b05ef0ac83bd2ea08739c287379bd1e5406e62d4760e11c8",
+    "audiopack.py": "2ea8fa2ee0a937d506fc14041930c7f8a11308583e9a2b0e41ce0bf6db057dd4",
     "bitmap.py": "14043739de808030adeb27f3ca3dcbe944e4296d3f9a579e49c89ffb5bdd1eab",
     "capture.py": "6bd357becc1fdf0c0faca4bf3a219b9c629b694432e1425444b0d419c878105e",
-    "credentials.py": "53f4968af8c9e8c5e44ff1b0354c6230178481697eaf89028462edef45ba0b2a",
+    "credentials.py": "f9c7163c5e6c0f96490b5e3e09dc5121cc0f27e46c8ad5c661c60e6d75137f29",
     "hearing.py": "9a7d337e82bb32e13f28e67a2547667fef7619186a295ee71c726b2e339f4cbf",
     "housekeeping.py": "fcbaf7f4cecccd9d8ec75c075476e16c6dacef8d0614359acb382db46d438a57",
     "icon/1000X400.png": "6ac6a8785138feababa32686daa61f11639079e4ff4a2755d1693ac2c304a0f2",
@@ -31,7 +31,7 @@
     "languages.py": "7c95aa887046666cd52aaafa3a6402d58bd69dafe8b587830da47753b3f90780",
     "log.py": "d251f024b78f742c5cc91dab5670d9cb30894834692e49bb3db3a297719a6268",
     "matroska.py": "8471b86a3682b438aae47568e48dc5b42b1995d5b1f81e15396910f723c8c87e",
-    "menukey.py": "1324a0853878d18a6d77edb14686b7868b316bb56afe72a7f6f6862762f5d861",
+    "menukey.py": "7d1ee903dd68cc816377838fb669fef5ed2ac7c644f2f262e0e936027305c9f6",
     "models.py": "249d71dfb9956b45465105463d0e04e0794c789dd452b67b6e2d7f9a084935e0",
     "mp4.py": "c8ed2f853190599132df9d157b22af0bab421b9dc0a18ec3ae490b217bda22c3",
     "ocr.py": "3e3aa55cde85845d9ca25dc8fbc392ce41b5b182541a6a77d749e4b2859d5da5",
@@ -80,25 +80,25 @@
     "ownocr_templates/french_dvb.json": "56dd670b0deea4e887bd516e7cc08d178c9436330401af25b478921dcca5bbad",
     "ownocr_templates/polish.json": "d380b58fc350e170123707f265895d74bbf6aa2647f342e86746513dd59a2b13",
     "ownocr_templates/tv5monde.json": "515362a9a62d03d93104c023f3c567770f0459f2021de9be98b030c054d80952",
-    "playback.py": "200c6c0d201978eada765d589d4dac0d3384fab5a564300f0e668498988aeb62",
+    "playback.py": "3ace0057747fe4295b1c8ef2368b5954c0ba9164f10a9ae9b4e782ef09be8a6d",
     "plugin.py": "b6b4ad727f17de517ac8e1f771621a4918b3b831faf99b0133cd3a49662c1626",
     "preferences.py": "9d60884faea0e9c4ea4fa0dfbd4243ce4b18fa99ba85ebc54a0a572f2a4d7ab4",
     "runtime.py": "46b274fe80aba35bacb5609f637f67ada8a4c29972fe89688491822bb96f556c",
     "samples.py": "df4944371db0fc836f034a623a2f70150125e1a3a5ba27436a34ca9387ba1534",
     "skin/__init__.py": "67c871a24e2c0fe1d59b3664bf9f2e5865bfe1ae5ffd770570c1a91b90566092",
-    "skin/browser.py": "e10032e9319cb1f7c465f3fbb1a4f846e54d6684274141218f2168704aca4e5f",
+    "skin/browser.py": "a66a296863d42ddafe0a279ee84dc959696b3d50388adeedec292ecc3560ed0e",
     "skin/captions.py": "d769a5a5abc9c6947e37253b27c2f4107a4d5755a769e179022103969d083ba8",
     "skin/fonts.py": "3519187028ee6086efeb3d7fb61140fec39c583262c82365c90e7e82267b189a",
     "skin/help.py": "45dd3efc3f961921e7e700d287f43cf4ffbcd40812458714c1480e990bcb9ea2",
-    "skin/layout.py": "1e78285187547887d357b49933c7c7ff0575c927ecc8be5eb46513b49b17092f",
+    "skin/layout.py": "9e0fab14f41a437f417e55edcf42f8c87d7e8550cc4c3f077472c99833882568",
     "skin/ocr_languages.py": "39946431be40758a06e3ef4ca95563c1c4722753af0cfbb404fbe4da2fa15bcc",
     "skin/settings.py": "e09da8b67d8448666b9cd0b9c955248b01ff71dde0e82be19849a48cda442f54",
     "skin/widgets.py": "f2be3d75911e3b70a3dd8b4b838303a6e66fb3d2a21687b5a10efc1adba7b572",
-    "speech.py": "057176910132b5cffb42dadebb04a9a4b10507b1c7f5221f1cab66c9adb734ce",
+    "speech.py": "ae4d2b67d6bb0376435dd09d1da7a3e5e13020fb0ebb41a0f7e692eb0a7ebb82",
     "speech_languages.py": "9d4b16082a9600d81d9085ee2f7d1fcb151ea6662ab0bf7d6957a0fa4a4e18f0",
-    "stream.py": "0f05f94f1dc12e6cb535893253822e1f1ad37e8ff903b36e3c70fac781c0da96",
+    "stream.py": "239d9bb4c7f6cfe15ff3a4c3d72a5b68bc835b8fe1837ec878ac731552fe0553",
     "textpages.py": "6a428361eb4db7cbcc3794f1f037b5a5f3fc83ca6af1b6148b78ce2c8789c1b3",
-    "translate.py": "a63e125158156e6e1902cb1a356f99bbaa4b647911aaaddecc9fce4f76d2185b",
+    "translate.py": "a5170217c402ed7df229875435c0efde190da89fd239b13981f91dc885b5e65c",
     "ver.txt": "77ac319bfe1979e2d799d9e6987e65feb54f61511c03552ebae990826c208590"
   },
   "tools": {
@@ -124,7 +124,7 @@
   "targets": {
     "py27-mips": {
       "archive": "ChannelLingo-py27-mips.zip",
-      "sha256": "eefe9c7e002332f0812b02ea65d188e8775aa683afbc53bde70729d5feb7142e",
+      "sha256": "ffd6547534b7ebbb77f95133eacec9598922e53649e6d090153d797a900a145d",
       "modules": 34,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -143,10 +143,10 @@
   "protection": "Native compilation, stripped private symbols; reverse engineering remains possible.",
   "builder_tests": "PASSED (release-boundary tests; see BUILDER_TESTS.txt)",
   "builder_sha256": {
-    "build_protected.py": "7b7f9a71ef41fde7c43866d7040d2d1aa36d22d2eb6c666c32855615a50e2060",
+    "build_protected.py": "092c081a9d25f1ec38ab6e031ac314c5e4a491306b25cceaed0aee3631aae7a3",
     "generate_child.py": "a5f89ed82b0157c8e2ee4a9e9aded0104bd112974cf7616a3eaff0cc67d4d580",
     "verify_behavior.py": "f294c6229b0e4b5749a5296c43af0c5223f81b4b0b0417c415f42711c0de4ec7",
-    "test_builder.py": "df7cf03e097da0f3059f29ebb867382e0459e0522da573e434d476f1e2d6dc15"
+    "test_builder.py": "fcebb115a01ec6901581bd3bb7ce78a7efb057004d5c767f86bb7716b57ff671"
   },
   "source_unchanged": true
 }

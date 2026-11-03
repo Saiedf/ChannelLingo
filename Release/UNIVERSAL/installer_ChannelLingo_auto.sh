@@ -1,5 +1,5 @@
 #!/bin/sh
-# ChannelLingo by iet5 - unattended receiver installer.
+# ChannelLingo by IET5 - unattended receiver installer.
 set -eu
 say() { printf '%s\n' "$*"; }
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
@@ -44,12 +44,18 @@ trap cleanup EXIT
 trap 'exit 1' HUP INT TERM
 fetch() {
     if [ "$FETCH" = curl ]; then
-        curl -fL --retry 2 --connect-timeout 30 -o "$2" "$1"
+        set -- curl -fL --retry 2 --connect-timeout 30 --max-time 900 -o "$2" "$1"
     else
-        wget -O "$2" "$1"
+        set -- wget -T 30 -O "$2" "$1"
+    fi
+    # Bound the whole transfer too, including a server that keeps sending tiny pieces.
+    if command -v timeout >/dev/null 2>&1; then
+        timeout 900 "$@"
+    else
+        "$@"
     fi
 }
-say "ChannelLingo - automatic download and installation"
+say "ChannelLingo by IET5 - automatic download and installation"
 say "Downloading the universal package..."
 fetch "$BASE/ChannelLingo-universal.zip" "$WORK/ChannelLingo-universal.zip" || die "Download failed. Check internet access and that the repository is public."
 fetch "$BASE/ChannelLingo-universal.zip.sha256" "$WORK/checksum" || die "Cannot download the package checksum."
