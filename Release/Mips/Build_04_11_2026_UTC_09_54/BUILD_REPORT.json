@@ -1,11 +1,9 @@
 {
   "status": "SUCCESS",
-  "run": "Build_04_11_2026_UTC_08_55",
-  "profile": "release",
+  "run": "Build_04_11_2026_UTC_09_54",
+  "profile": "mips",
   "python_targets": [
-    "2.7-ucs2",
-    "2.7",
-    "3.14"
+    "2.7"
   ],
   "abi": "standard GIL release; Python 2.7 UCS4 and UCS2",
   "source": "/mnt/c/Users/S-PC/Desktop/SubExtractor/ChannelLingo/ChannelLingo",
@@ -84,7 +82,7 @@
     "ownocr_templates/tv5monde.json": "515362a9a62d03d93104c023f3c567770f0459f2021de9be98b030c054d80952",
     "playback.py": "c4913077fd0efc6fe77bff9da6900d858e4073dc3920289d3662d24466518b64",
     "plugin.py": "24560aecf066eb7dd004fdbf9434769af1165dc8b359d995c10b26aa12dc2f51",
-    "preferences.py": "9d60884faea0e9c4ea4fa0dfbd4243ce4b18fa99ba85ebc54a0a572f2a4d7ab4",
+    "preferences.py": "6a77e9c393a871327cac3603407cd84b2b056b760d307a25c846a5e9d80b44cd",
     "runtime.py": "07592011639f707afe74ec8ef8cbebaeec3f8e1166bde1c159b91baa1c4ff1b9",
     "samples.py": "df4944371db0fc836f034a623a2f70150125e1a3a5ba27436a34ca9387ba1534",
     "skin/__init__.py": "67c871a24e2c0fe1d59b3664bf9f2e5865bfe1ae5ffd770570c1a91b90566092",
@@ -124,81 +122,16 @@
   "python27_runtime_tests": "NOT RUN",
   "receiver_tests": "NOT RUN",
   "targets": {
-    "py27-dm": {
-      "archive": "ChannelLingo-py27-dm.zip",
-      "sha256": "18f4e0bc3e6477c52987e4ebcaa4cb8122e8b0f256e9421d20017f004679a366",
+    "py27-mips": {
+      "archive": "ChannelLingo-py27-mips.zip",
+      "sha256": "234932945e9f1a0840485c6cc9407ff1b41ff9d6d21535208ef73ed84dcc6136",
       "modules": 34,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
       "header_provenance": [
-        "https://archive.debian.org/debian/pool/main/p/python2.7/libpython2.7-dev_2.7.18-8+deb11u1_armhf.deb",
-        "35bd1de57cad66ac1f7551016ee111d7349318d785597f18d615e2005b1a8626",
-        "arm-linux-gnueabihf"
-      ],
-      "receiver_tests": "NOT RUN"
-    },
-    "py27ucs2-aarch64": {
-      "archive": "ChannelLingo-py27ucs2-aarch64.zip",
-      "sha256": "8963711648703314f0ffc1b4ec4a656f5bf355f6f4fef6837ba0431c74d22e9d",
-      "modules": 34,
-      "elf_audit": "PASSED",
-      "source_leak_check": "PASSED",
-      "header_provenance": [
-        "https://archive.debian.org/debian/pool/main/p/python2.7/libpython2.7-dev_2.7.18-8+deb11u1_arm64.deb",
-        "6b0c748b11c116b4833c877b799d4b4ec1509717cc265ca323fefba26db71859",
-        "aarch64-linux-gnu"
-      ],
-      "receiver_tests": "NOT RUN"
-    },
-    "py27ucs4-armv7l": {
-      "archive": "ChannelLingo-py27ucs4-armv7l.zip",
-      "sha256": "e2b1b2c72b60f532de6bafe5568c5e6300c2ae5f4e95cffa210df176548caa52",
-      "modules": 34,
-      "elf_audit": "PASSED",
-      "source_leak_check": "PASSED",
-      "header_provenance": [
-        "https://archive.debian.org/debian/pool/main/p/python2.7/libpython2.7-dev_2.7.18-8+deb11u1_armhf.deb",
-        "35bd1de57cad66ac1f7551016ee111d7349318d785597f18d615e2005b1a8626",
-        "arm-linux-gnueabihf"
-      ],
-      "receiver_tests": "NOT RUN"
-    },
-    "py27ucs4-aarch64": {
-      "archive": "ChannelLingo-py27ucs4-aarch64.zip",
-      "sha256": "45afc21d1718556d3f51f7b5da1f8b5260e6be232fa4eff2baa06fd71177ca55",
-      "modules": 34,
-      "elf_audit": "PASSED",
-      "source_leak_check": "PASSED",
-      "header_provenance": [
-        "https://archive.debian.org/debian/pool/main/p/python2.7/libpython2.7-dev_2.7.18-8+deb11u1_arm64.deb",
-        "6b0c748b11c116b4833c877b799d4b4ec1509717cc265ca323fefba26db71859",
-        "aarch64-linux-gnu"
-      ],
-      "receiver_tests": "NOT RUN"
-    },
-    "py314-dm": {
-      "archive": "ChannelLingo-py314-dm.zip",
-      "sha256": "9455667ca8e156d14a658142a534cbefbd33be0be26ff9ebbdfe215be80110b0",
-      "modules": 34,
-      "elf_audit": "PASSED",
-      "source_leak_check": "PASSED",
-      "header_provenance": [
-        "https://deb.debian.org/debian/pool/main/p/python3.14/libpython3.14-dev_3.14.8-1_armhf.deb",
-        "f45df0ee8b248a83e800eef6984512fe18dce0cdf5704339fb3001abc6fe8a4a",
-        "arm-linux-gnueabihf"
-      ],
-      "receiver_tests": "NOT RUN"
-    },
-    "py314-aarch64": {
-      "archive": "ChannelLingo-py314-aarch64.zip",
-      "sha256": "0c65fe5f7f37122246cf0b183dbf75f3d131513936df1c0287cabfe7c8ddd874",
-      "modules": 34,
-      "elf_audit": "PASSED",
-      "source_leak_check": "PASSED",
-      "header_provenance": [
-        "https://deb.debian.org/debian/pool/main/p/python3.14/libpython3.14-dev_3.14.8-1_arm64.deb",
-        "4590762d42f0581562941a4354caf11aa09187f4075002750e7d0cbe9474a15e",
-        "aarch64-linux-gnu"
+        "https://archive.debian.org/debian/pool/main/p/python2.7/libpython2.7-dev_2.7.18-8+deb11u1_mipsel.deb",
+        "e440dc0b4cfb87ec4c1fbfa019ddd660b1c26e7749784644837ad011db6836cb",
+        "mipsel-linux-gnu"
       ],
       "receiver_tests": "NOT RUN"
     }
@@ -214,19 +147,6 @@
     "generate_child.py": "a5f89ed82b0157c8e2ee4a9e9aded0104bd112974cf7616a3eaff0cc67d4d580",
     "verify_behavior.py": "f294c6229b0e4b5749a5296c43af0c5223f81b4b0b0417c415f42711c0de4ec7",
     "test_builder.py": "db2a3b602adfb644d3cded5e58e8b330ee74614ef8d741428bc5f117a426ded9"
-  },
-  "universal": {
-    "archive": "ChannelLingo-universal.zip",
-    "sha256": "521cfe9ea27e165fef5bdfebcb3e763eed16da2bb46e7f0ee364e6c1aabb33f9",
-    "builds": [
-      "py27-dm",
-      "py27ucs2-aarch64",
-      "py27ucs4-aarch64",
-      "py27ucs4-armv7l",
-      "py314-aarch64",
-      "py314-dm"
-    ],
-    "chosen": "when installed, by install.sh; the plugin itself decides nothing"
   },
   "source_unchanged": true
 }
