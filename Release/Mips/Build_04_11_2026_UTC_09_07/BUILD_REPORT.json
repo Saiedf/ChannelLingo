@@ -1,6 +1,6 @@
 {
   "status": "SUCCESS",
-  "run": "Build_03_11_2026_UTC_15_56",
+  "run": "Build_04_11_2026_UTC_09_07",
   "profile": "mips",
   "python_targets": [
     "2.7"
@@ -80,10 +80,10 @@
     "ownocr_templates/french_dvb.json": "56dd670b0deea4e887bd516e7cc08d178c9436330401af25b478921dcca5bbad",
     "ownocr_templates/polish.json": "d380b58fc350e170123707f265895d74bbf6aa2647f342e86746513dd59a2b13",
     "ownocr_templates/tv5monde.json": "515362a9a62d03d93104c023f3c567770f0459f2021de9be98b030c054d80952",
-    "playback.py": "3ace0057747fe4295b1c8ef2368b5954c0ba9164f10a9ae9b4e782ef09be8a6d",
-    "plugin.py": "b6b4ad727f17de517ac8e1f771621a4918b3b831faf99b0133cd3a49662c1626",
+    "playback.py": "c4913077fd0efc6fe77bff9da6900d858e4073dc3920289d3662d24466518b64",
+    "plugin.py": "24560aecf066eb7dd004fdbf9434769af1165dc8b359d995c10b26aa12dc2f51",
     "preferences.py": "9d60884faea0e9c4ea4fa0dfbd4243ce4b18fa99ba85ebc54a0a572f2a4d7ab4",
-    "runtime.py": "46b274fe80aba35bacb5609f637f67ada8a4c29972fe89688491822bb96f556c",
+    "runtime.py": "07592011639f707afe74ec8ef8cbebaeec3f8e1166bde1c159b91baa1c4ff1b9",
     "samples.py": "df4944371db0fc836f034a623a2f70150125e1a3a5ba27436a34ca9387ba1534",
     "skin/__init__.py": "67c871a24e2c0fe1d59b3664bf9f2e5865bfe1ae5ffd770570c1a91b90566092",
     "skin/browser.py": "a66a296863d42ddafe0a279ee84dc959696b3d50388adeedec292ecc3560ed0e",
@@ -94,12 +94,12 @@
     "skin/ocr_languages.py": "39946431be40758a06e3ef4ca95563c1c4722753af0cfbb404fbe4da2fa15bcc",
     "skin/settings.py": "e09da8b67d8448666b9cd0b9c955248b01ff71dde0e82be19849a48cda442f54",
     "skin/widgets.py": "f2be3d75911e3b70a3dd8b4b838303a6e66fb3d2a21687b5a10efc1adba7b572",
-    "speech.py": "ae4d2b67d6bb0376435dd09d1da7a3e5e13020fb0ebb41a0f7e692eb0a7ebb82",
+    "speech.py": "b1e09655e56c83dd2ed311433d620e77d992ed454bb99d22a4f32838f58ef0be",
     "speech_languages.py": "9d4b16082a9600d81d9085ee2f7d1fcb151ea6662ab0bf7d6957a0fa4a4e18f0",
-    "stream.py": "239d9bb4c7f6cfe15ff3a4c3d72a5b68bc835b8fe1837ec878ac731552fe0553",
+    "stream.py": "e9e3384876115532af8b4f074769e8a1615b1e5647800b246eb0feb64719dff1",
     "textpages.py": "6a428361eb4db7cbcc3794f1f037b5a5f3fc83ca6af1b6148b78ce2c8789c1b3",
-    "translate.py": "a5170217c402ed7df229875435c0efde190da89fd239b13981f91dc885b5e65c",
-    "ver.txt": "77ac319bfe1979e2d799d9e6987e65feb54f61511c03552ebae990826c208590"
+    "translate.py": "471b134d538b20db8d8d2b2f8873b2d1be92ecb999feaf3ebacbcdac0e9bd4a3",
+    "ver.txt": "9c193c604ad7de942961af97b39ff541f2e611fdf0b93a3044e16dfbd808f41b"
   },
   "tools": {
     "cython": [
@@ -124,7 +124,7 @@
   "targets": {
     "py27-mips": {
       "archive": "ChannelLingo-py27-mips.zip",
-      "sha256": "ffd6547534b7ebbb77f95133eacec9598922e53649e6d090153d797a900a145d",
+      "sha256": "1936c61b894a1066041b440b368e8482d82fb5b6c9a0385c9b3c27cfc4a1b8ae",
       "modules": 34,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -143,10 +143,10 @@
   "protection": "Native compilation, stripped private symbols; reverse engineering remains possible.",
   "builder_tests": "PASSED (release-boundary tests; see BUILDER_TESTS.txt)",
   "builder_sha256": {
-    "build_protected.py": "092c081a9d25f1ec38ab6e031ac314c5e4a491306b25cceaed0aee3631aae7a3",
+    "build_protected.py": "b1d75404a966ceeabf5192adaf319ceec967d423bddb41f4329c24db516552bb",
     "generate_child.py": "a5f89ed82b0157c8e2ee4a9e9aded0104bd112974cf7616a3eaff0cc67d4d580",
     "verify_behavior.py": "f294c6229b0e4b5749a5296c43af0c5223f81b4b0b0417c415f42711c0de4ec7",
-    "test_builder.py": "fcebb115a01ec6901581bd3bb7ce78a7efb057004d5c767f86bb7716b57ff671"
+    "test_builder.py": "db2a3b602adfb644d3cded5e58e8b330ee74614ef8d741428bc5f117a426ded9"
   },
   "source_unchanged": true
 }

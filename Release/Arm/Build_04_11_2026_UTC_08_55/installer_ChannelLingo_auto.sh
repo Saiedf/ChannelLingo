@@ -42,6 +42,15 @@ cleanup() {
 }
 trap cleanup EXIT
 trap 'exit 1' HUP INT TERM
+# BusyBox images may use "timeout -t SECONDS", while GNU/new BusyBox use "timeout SECONDS".
+TIMEOUT_MODE=none
+if command -v timeout >/dev/null 2>&1; then
+    if timeout 1 sh -c 'exit 0' >/dev/null 2>&1; then
+        TIMEOUT_MODE=modern
+    elif timeout -t 1 sh -c 'exit 0' >/dev/null 2>&1; then
+        TIMEOUT_MODE=legacy
+    fi
+fi
 fetch() {
     if [ "$FETCH" = curl ]; then
         set -- curl -fL --retry 2 --connect-timeout 30 --max-time 900 -o "$2" "$1"
@@ -49,11 +58,11 @@ fetch() {
         set -- wget -T 30 -O "$2" "$1"
     fi
     # Bound the whole transfer too, including a server that keeps sending tiny pieces.
-    if command -v timeout >/dev/null 2>&1; then
-        timeout 900 "$@"
-    else
-        "$@"
-    fi
+    case "$TIMEOUT_MODE" in
+        modern) timeout 900 "$@" ;;
+        legacy) timeout -t 900 "$@" ;;
+        *) "$@" ;;
+    esac
 }
 say "ChannelLingo by IET5 - automatic download and installation"
 say "Downloading the universal package..."
@@ -75,6 +84,12 @@ INSTALL="$WORK/ChannelLingo-universal/install.sh"
 [ -f "$INSTALL" ] || die "The archive has no installer."
 # Check compatibility before interrupting the receiver's running interface.
 sh "$INSTALL" --check
+PLUGIN="${CHANNELLINGO_ROOT:-}/usr/lib/enigma2/python/Plugins/Extensions/ChannelLingo"
+if [ -e "$PLUGIN" ] || [ -L "$PLUGIN" ]; then
+    say "ChannelLingo by IET5: an existing installation was found; replacing it automatically."
+else
+    say "ChannelLingo by IET5: installing a new copy."
+fi
 if command -v systemctl >/dev/null 2>&1 && systemctl is-active --quiet enigma2.service; then
     RESTART=systemctl
     systemctl stop enigma2.service
