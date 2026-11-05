@@ -1,0 +1,232 @@
+{
+  "status": "SUCCESS",
+  "run": "Build_05_11_2026_UTC_10_53",
+  "profile": "release",
+  "python_targets": [
+    "2.7-ucs2",
+    "2.7",
+    "3.14"
+  ],
+  "abi": "standard GIL release; Python 2.7 UCS4 and UCS2",
+  "source": "/mnt/c/Users/S-PC/Desktop/SubExtractor/ChannelLingo/ChannelLingo",
+  "source_inventory": {
+    "__init__.py": "1cf4781036a758d0b7dec4d4212cf80cfbefb2085e0866bb564d968b4b9e06a9",
+    "audiopack.py": "2ea8fa2ee0a937d506fc14041930c7f8a11308583e9a2b0e41ce0bf6db057dd4",
+    "bitmap.py": "14043739de808030adeb27f3ca3dcbe944e4296d3f9a579e49c89ffb5bdd1eab",
+    "capture.py": "6bd357becc1fdf0c0faca4bf3a219b9c629b694432e1425444b0d419c878105e",
+    "credentials.py": "f9c7163c5e6c0f96490b5e3e09dc5121cc0f27e46c8ad5c661c60e6d75137f29",
+    "hearing.py": "9a7d337e82bb32e13f28e67a2547667fef7619186a295ee71c726b2e339f4cbf",
+    "housekeeping.py": "fcbaf7f4cecccd9d8ec75c075476e16c6dacef8d0614359acb382db46d438a57",
+    "icon/1000X400.png": "6ac6a8785138feababa32686daa61f11639079e4ff4a2755d1693ac2c304a0f2",
+    "icon/128X128.png": "a8a772a5afc675da37629485bf6e67211784f376cd4db4acaa723687554f8555",
+    "icon/16X16.png": "23c966338605d3567f6aa5bd1149a76b66edcd60117db273bc5909b1739e3a0e",
+    "icon/1983X793.png": "abf8707dcbc3c70d510ee8850d0ca8bc91ed4a4bf3b409b068ccc18404006351",
+    "icon/256X256.png": "82ed558319272b5cfac1ec86a1a16e1b80ce0213a57220d5ecc68c5bb99783b6",
+    "icon/32X32.png": "f535dc0220ac7b416d042ae1b90c0fe345be272528abb03f7184f1f7572f6901",
+    "icon/500X200.png": "a58c3b8bfa5a563f0b127b269e9d573a107eb5d402958148e880eca8796a4cfe",
+    "icon/512X512.png": "14d845f76c5234212f82bfad859175284346a5e7658f7900a04eb80282f3677f",
+    "icon/64X64.png": "bf55168c1c2b88114ca2fb30d58cd99c9792a2accd1197de97bd697d638ef94c",
+    "identity.py": "aa691ab47a964037a5877db8631bbedf8304c32597d32f0c391fe5ad9a694179",
+    "lang/__init__.py": "8765ce2f51b691c0276e3412a813fec516a1cddd433a4e24e6d69b9927472ea2",
+    "lang/ar.json": "5d10b0107e8aea906c83c0ccf9da126b30e39c43d48295af751a43549bce71d2",
+    "lang/en.json": "e33a870fde2c982e8fa5b1e80590878e9af6b53f649c0802f783391f98a64bcf",
+    "languages.py": "7c95aa887046666cd52aaafa3a6402d58bd69dafe8b587830da47753b3f90780",
+    "log.py": "d251f024b78f742c5cc91dab5670d9cb30894834692e49bb3db3a297719a6268",
+    "matroska.py": "c9e62958fc6233845a743886b46fa6dcd85d35018417d3dd8600899a2d2078e2",
+    "menukey.py": "7d1ee903dd68cc816377838fb669fef5ed2ac7c644f2f262e0e936027305c9f6",
+    "models.py": "249d71dfb9956b45465105463d0e04e0794c789dd452b67b6e2d7f9a084935e0",
+    "mp4.py": "433e0550912e81233c0f04601f1cb5dc1c8824b6bf152671e3c7ff4f6f278422",
+    "ocr.py": "3e3aa55cde85845d9ca25dc8fbc392ce41b5b182541a6a77d749e4b2859d5da5",
+    "ocr_assets/THIRD_PARTY.md": "07372d06edb99d99f08c7fcf66ad5431226b3ad12be29c76db5c13e1680dc671",
+    "ocr_assets/aarch64-audit.json": "531bb54f569432f92eec7717df3756a53514999c3015ed53d02a7680bccd1480",
+    "ocr_assets/aarch64-build.json": "436fe9656a5e6e3eb392edba29063735c896cca71f78555bf34821721f29817e",
+    "ocr_assets/armv7l-audit.json": "8d553df58ad8b9dc2f16894cdd8419e362ebb167d6091fb84e9fc443a702b46b",
+    "ocr_assets/armv7l-build.json": "08803c153b4bef026b908e92ea9eb50320bad54f56963f9101e41df2fefdd04c",
+    "ocr_assets/licenses/AArch64-Leptonica.txt": "87829abb5bbb00b55a107365da89e9a33f86c4250169e5a1e5588505be7d5806",
+    "ocr_assets/licenses/AArch64-Tesseract-Apache-2.0.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "ocr_assets/licenses/AArch64-Zig.txt": "5c537d6853e005298a285d508cff9ac7192cea23576c840d485b2b586a7ff177",
+    "ocr_assets/licenses/AArch64-libcxx.txt": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b",
+    "ocr_assets/licenses/AArch64-libcxxabi.txt": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c",
+    "ocr_assets/licenses/AArch64-libunwind.txt": "b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d",
+    "ocr_assets/licenses/AArch64-musl.txt": "f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af",
+    "ocr_assets/licenses/Apache-2.0.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "ocr_assets/manifest.json": "2d701a18f7db91b8e5a9530dc3ec16924e7f83102f84f47fd6733753d8d84d1f",
+    "ocr_assets/models/ara.clm": "4aa67a5d745f2b236ac6d89f476240e95500ae4c1734613884dab696cc3d2247",
+    "ocr_assets/models/bul.clm": "d47cabf0dc114408939671615ccf7d2c53c7e84570ba757a0b0a03f30e7bf190",
+    "ocr_assets/models/ces.clm": "d5ca1c84c791a83ee3c107b75bea856737df19d7142c76bd14371823b3bb419c",
+    "ocr_assets/models/dan.clm": "4a6e7536cee3dbb217a29d8153290a7e171eb31882ef15200a3c7d01e23818b8",
+    "ocr_assets/models/deu.clm": "9cec86e656b7eb9bcda9d4b76462fb30e6858062261d7cebd0001ff312e1443b",
+    "ocr_assets/models/ell.clm": "d5780d1a01154355cda3ef7e6e8943ff63eafda9d8a28f1abcbaf098e6032d5a",
+    "ocr_assets/models/eng.clm": "5bb8fe0a952a20e45644291951782a2c3712eab4f64c33f20ec18bb6d787e470",
+    "ocr_assets/models/fin.clm": "15fee7412359ad2bd7d5f684fcb05125d38185b203bb71813e5e6cf56a892f41",
+    "ocr_assets/models/fra.clm": "89f0d31a4962400246b2d7b706af6351a004fa01f0e54177bf9a992e8df658c6",
+    "ocr_assets/models/hrv.clm": "6e438a7d5ae86b8900b47cdb24ce0a933b9699555e8797a644f8e3395ad4c567",
+    "ocr_assets/models/hun.clm": "4ee91a316562ee2eb76f1c280f4e365c701f042cd4a605f8dc12281500634de7",
+    "ocr_assets/models/ita.clm": "1259bc365a4483dbca7ed99fd6775a8351e6634a9f0737b71854e3fcc6ef4525",
+    "ocr_assets/models/nld.clm": "612d79036ebf587956d440d061cb22a055a1940790ce6722728b44ac62b139a2",
+    "ocr_assets/models/nor.clm": "93bdb6a7cbe8a14b1a1050f0757bd693fc7023ffe723fc59349c08055965cb64",
+    "ocr_assets/models/pol.clm": "d57aab256fbfaffe0849846fd0a7432b3f69f3951124140c8fe3a376fdc1d451",
+    "ocr_assets/models/por.clm": "1a9393568ed8e88ec2d0b584784a3d833643194c27c0832f39e69a4af5e9e1ff",
+    "ocr_assets/models/ron.clm": "8b6c20c2311de2e472bd32d10620161a0f3c8b3317dea4c06f9717eaa818c49e",
+    "ocr_assets/models/rus.clm": "0df692e807d958d100183af64c32912dcc12467afe96d51d013b02e1b9cee302",
+    "ocr_assets/models/slk.clm": "e9a62034e097d5c7094c204d72346e7959f66bde1ae93969747064db60a60e7e",
+    "ocr_assets/models/slv.clm": "82b57d8c7c6c64cf5e4ad82e93ed4810e29961e7acfc4913ba4a73f6495a29ee",
+    "ocr_assets/models/spa.clm": "626037ab0cbb61f1d0fa24b8479984ce8ca2550eacdc262935fde385190325c7",
+    "ocr_assets/models/srp.clm": "e7cee72c1bf6d3712e3c4da7c7cc422473cbe53928d82ce176dbf90f859ca4eb",
+    "ocr_assets/models/swe.clm": "18ceffe4ce3c73eb2bdbebc3d2d5928f9858c8f9928f4b52c8b44999ef6859f8",
+    "ocr_assets/runtime/aarch64/core.clx": "0c0f573704c75a2c2345caae252ce77f261687b4edb4708ca4decaeca2ef64a5",
+    "ocr_assets/runtime/armv7l/core.clx": "62620aea2ea23ca90be535d5024ffc8a998b2c6cc65e52922e07450c13d8b0c5",
+    "ownocr.py": "456b4fa9b9ddcd981fea50c34700bef01a345b7b9a43ffa393ded1854d3e90d5",
+    "ownocr_templates/arte.json": "bfa0ab938e616cb129e92de59631fdd608e3c79d29963ed24175f0406df5e63c",
+    "ownocr_templates/dutch_segoe.json": "c80ad48fbf263933ac8d2117e0f19a3566d4526dbf2eb89e342f3e914beb7397",
+    "ownocr_templates/french_dvb.json": "56dd670b0deea4e887bd516e7cc08d178c9436330401af25b478921dcca5bbad",
+    "ownocr_templates/polish.json": "d380b58fc350e170123707f265895d74bbf6aa2647f342e86746513dd59a2b13",
+    "ownocr_templates/tv5monde.json": "515362a9a62d03d93104c023f3c567770f0459f2021de9be98b030c054d80952",
+    "playback.py": "c2e414a1723c42e7753a1e2f215ccf4db649deae92a9148e2facd40e684f6ecd",
+    "plugin.py": "b3f59f8cee514a2239af9426caab70dcb0daf24f863f77103163845a0575696c",
+    "preferences.py": "f1699d52d992b57728bf555ae3521d8155986126263827c26285e608c024862c",
+    "runtime.py": "07592011639f707afe74ec8ef8cbebaeec3f8e1166bde1c159b91baa1c4ff1b9",
+    "samples.py": "df4944371db0fc836f034a623a2f70150125e1a3a5ba27436a34ca9387ba1534",
+    "skin/__init__.py": "67c871a24e2c0fe1d59b3664bf9f2e5865bfe1ae5ffd770570c1a91b90566092",
+    "skin/browser.py": "5c7e0e162d7e01bf9f00fb940c6363fac20c6d3d60a8dddc0fde72f6a2d61fb8",
+    "skin/captions.py": "d769a5a5abc9c6947e37253b27c2f4107a4d5755a769e179022103969d083ba8",
+    "skin/fonts.py": "3519187028ee6086efeb3d7fb61140fec39c583262c82365c90e7e82267b189a",
+    "skin/help.py": "45dd3efc3f961921e7e700d287f43cf4ffbcd40812458714c1480e990bcb9ea2",
+    "skin/layout.py": "9e0fab14f41a437f417e55edcf42f8c87d7e8550cc4c3f077472c99833882568",
+    "skin/ocr_languages.py": "39946431be40758a06e3ef4ca95563c1c4722753af0cfbb404fbe4da2fa15bcc",
+    "skin/settings.py": "e75cf7cb606690d864574e55ebcbc64eb4880ac390ea59f65067d5f3440f8bf4",
+    "skin/widgets.py": "f2be3d75911e3b70a3dd8b4b838303a6e66fb3d2a21687b5a10efc1adba7b572",
+    "speech.py": "a787db5925ffc25fb053916f24a45ddffe813af0c1a87ee1a09f121fb2b99478",
+    "speech_languages.py": "9d4b16082a9600d81d9085ee2f7d1fcb151ea6662ab0bf7d6957a0fa4a4e18f0",
+    "stream.py": "88cc409a9a0722951edcd3be60341378e2352a0a76cd982b93d960da4ce0cf09",
+    "textpages.py": "6a428361eb4db7cbcc3794f1f037b5a5f3fc83ca6af1b6148b78ce2c8789c1b3",
+    "translate.py": "471b134d538b20db8d8d2b2f8873b2d1be92ecb999feaf3ebacbcdac0e9bd4a3",
+    "ver.txt": "1a948f1b4374f4e3f02501c7feb43784021718a93c1ed5f9f19adf357bb2d20e"
+  },
+  "tools": {
+    "cython": [
+      "https://files.pythonhosted.org/packages/91/85/7574c9cd44b69a27210444b6650f6477f56c75fee1b70d7672d3e4166167/cython-3.2.4.tar.gz",
+      "84226ecd313b233da27dc2eb3601b4f222b8209c3a7216d8733b031da1dc64e6",
+      "cython-3.2.4"
+    ],
+    "zig": [
+      "https://ziglang.org/download/0.15.2/zig-x86_64-linux-0.15.2.tar.xz",
+      "02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239",
+      "zig-x86_64-linux-0.15.2"
+    ],
+    "cython27": [
+      "https://files.pythonhosted.org/packages/5a/25/886e197c97a4b8e254173002cdc141441e878ff29aaa7d9ba560cd6e4866/cython-3.0.12.tar.gz",
+      "b988bb297ce76c671e28c97d017b95411010f7c77fa6623dd0bb47eed1aee1bc",
+      "cython-3.0.12"
+    ]
+  },
+  "native_tests": "PASSED (Linux x86_64 CPython 3.14; behavior comparison and mocked Enigma2 imports)",
+  "python27_runtime_tests": "NOT RUN",
+  "receiver_tests": "NOT RUN",
+  "targets": {
+    "py27-dm": {
+      "archive": "ChannelLingo-py27-dm.zip",
+      "sha256": "33b8171b9c3514cc7f0182d4d6f0402bb66ebf33e835c332dc806d44865125f5",
+      "modules": 34,
+      "elf_audit": "PASSED",
+      "source_leak_check": "PASSED",
+      "header_provenance": [
+        "https://archive.debian.org/debian/pool/main/p/python2.7/libpython2.7-dev_2.7.18-8+deb11u1_armhf.deb",
+        "35bd1de57cad66ac1f7551016ee111d7349318d785597f18d615e2005b1a8626",
+        "arm-linux-gnueabihf"
+      ],
+      "receiver_tests": "NOT RUN"
+    },
+    "py27ucs2-aarch64": {
+      "archive": "ChannelLingo-py27ucs2-aarch64.zip",
+      "sha256": "5237fef9dfa8675532f1957bb14b6837e71da402d8d54cffb6c1619c234ca388",
+      "modules": 34,
+      "elf_audit": "PASSED",
+      "source_leak_check": "PASSED",
+      "header_provenance": [
+        "https://archive.debian.org/debian/pool/main/p/python2.7/libpython2.7-dev_2.7.18-8+deb11u1_arm64.deb",
+        "6b0c748b11c116b4833c877b799d4b4ec1509717cc265ca323fefba26db71859",
+        "aarch64-linux-gnu"
+      ],
+      "receiver_tests": "NOT RUN"
+    },
+    "py27ucs4-armv7l": {
+      "archive": "ChannelLingo-py27ucs4-armv7l.zip",
+      "sha256": "547c039c1efe4f1e28acffa77183533d9fdf51fcb52cb62c931520a74e22e8f0",
+      "modules": 34,
+      "elf_audit": "PASSED",
+      "source_leak_check": "PASSED",
+      "header_provenance": [
+        "https://archive.debian.org/debian/pool/main/p/python2.7/libpython2.7-dev_2.7.18-8+deb11u1_armhf.deb",
+        "35bd1de57cad66ac1f7551016ee111d7349318d785597f18d615e2005b1a8626",
+        "arm-linux-gnueabihf"
+      ],
+      "receiver_tests": "NOT RUN"
+    },
+    "py27ucs4-aarch64": {
+      "archive": "ChannelLingo-py27ucs4-aarch64.zip",
+      "sha256": "ebdd68049838495fc6c5b443f9719f8b5bc837a7083a7d4209c48e999f047d61",
+      "modules": 34,
+      "elf_audit": "PASSED",
+      "source_leak_check": "PASSED",
+      "header_provenance": [
+        "https://archive.debian.org/debian/pool/main/p/python2.7/libpython2.7-dev_2.7.18-8+deb11u1_arm64.deb",
+        "6b0c748b11c116b4833c877b799d4b4ec1509717cc265ca323fefba26db71859",
+        "aarch64-linux-gnu"
+      ],
+      "receiver_tests": "NOT RUN"
+    },
+    "py314-dm": {
+      "archive": "ChannelLingo-py314-dm.zip",
+      "sha256": "3047f50e29ac89901a317770cd4ffb51dc6b2f6243087d361fa618ef7d34cb3b",
+      "modules": 34,
+      "elf_audit": "PASSED",
+      "source_leak_check": "PASSED",
+      "header_provenance": [
+        "https://deb.debian.org/debian/pool/main/p/python3.14/libpython3.14-dev_3.14.8-1_armhf.deb",
+        "f45df0ee8b248a83e800eef6984512fe18dce0cdf5704339fb3001abc6fe8a4a",
+        "arm-linux-gnueabihf"
+      ],
+      "receiver_tests": "NOT RUN"
+    },
+    "py314-aarch64": {
+      "archive": "ChannelLingo-py314-aarch64.zip",
+      "sha256": "58a7f604f4f604fb6fd58c7e50455025a7f09b1d7a87d13e8325aa24081a9c6b",
+      "modules": 34,
+      "elf_audit": "PASSED",
+      "source_leak_check": "PASSED",
+      "header_provenance": [
+        "https://deb.debian.org/debian/pool/main/p/python3.14/libpython3.14-dev_3.14.8-1_arm64.deb",
+        "4590762d42f0581562941a4354caf11aa09187f4075002750e7d0cbe9474a15e",
+        "aarch64-linux-gnu"
+      ],
+      "receiver_tests": "NOT RUN"
+    }
+  },
+  "build_workarounds": [
+    "Staged tuple() unpacking for two bytearray slices (Cython inference bug)",
+    "Python 2.7 optional crypt.h disabled; ABI layout settings preserved"
+  ],
+  "protection": "Native compilation, stripped private symbols; reverse engineering remains possible.",
+  "builder_tests": "PASSED (release-boundary tests; see BUILDER_TESTS.txt)",
+  "builder_sha256": {
+    "build_protected.py": "b858d17cd77e88053ccd1c0eb18f834a1a80b144b9620a6276a52a3f7fd0673e",
+    "generate_child.py": "a5f89ed82b0157c8e2ee4a9e9aded0104bd112974cf7616a3eaff0cc67d4d580",
+    "verify_behavior.py": "f294c6229b0e4b5749a5296c43af0c5223f81b4b0b0417c415f42711c0de4ec7",
+    "test_builder.py": "db2a3b602adfb644d3cded5e58e8b330ee74614ef8d741428bc5f117a426ded9"
+  },
+  "universal": {
+    "archive": "ChannelLingo-universal.zip",
+    "sha256": "73fab6291a937740e7b5e544b405331cca752a0a42312177c0da713ebebc73f3",
+    "builds": [
+      "py27-dm",
+      "py27ucs2-aarch64",
+      "py27ucs4-aarch64",
+      "py27ucs4-armv7l",
+      "py314-aarch64",
+      "py314-dm"
+    ],
+    "chosen": "when installed, by install.sh; the plugin itself decides nothing"
+  },
+  "source_unchanged": true
+}
