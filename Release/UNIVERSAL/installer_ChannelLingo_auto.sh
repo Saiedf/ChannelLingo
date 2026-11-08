@@ -82,8 +82,30 @@ else
 fi
 INSTALL="$WORK/ChannelLingo-universal/install.sh"
 [ -f "$INSTALL" ] || die "The archive has no installer."
-# Check compatibility before interrupting the receiver's running interface.
-sh "$INSTALL" --check
+# Check compatibility while Enigma2 is running: some images load libpython
+# dynamically, so its ELF dependencies alone cannot identify Python after init 4.
+PREFLIGHT=$(sh "$INSTALL" --check) || die "Compatibility check failed; nothing was installed."
+say "$PREFLIGHT"
+EXPECTED_FACTS=$(printf '%s\n' "$PREFLIGHT" | awk '/^This receiver: Python / {print}')
+VERSION=$(printf '%s\n' "$PREFLIGHT" | awk '/^This receiver: Python / {print $4}')
+[ -n "$EXPECTED_FACTS" ] && [ -n "$VERSION" ] || die "The package did not report its Python requirements. Nothing was installed."
+INSTALL_PYTHON=""
+for candidate in "python$VERSION" python3 python python2; do
+    command -v "$candidate" >/dev/null 2>&1 || continue
+    # Match version, pointer size, Unicode ABI and processor to the successful
+    # preflight; do not select an interpreter merely because it is on PATH.
+    observed=$("$candidate" -S -c 'import platform, struct, sys
+if getattr(sys, "abiflags", "") or hasattr(sys, "gettotalrefcount"):
+    sys.exit(1)
+width = ("ucs2" if sys.maxunicode == 65535 else "ucs4") if sys.version_info[0] == 2 else "-"
+print("This receiver: Python %d.%d (%s), %d-bit, processor %s." %
+    (sys.version_info[0], sys.version_info[1], width, struct.calcsize("P") * 8, platform.machine().lower()))' 2>/dev/null) || continue
+    if [ "$observed" = "$EXPECTED_FACTS" ]; then
+        INSTALL_PYTHON=$candidate
+        break
+    fi
+done
+[ -n "$INSTALL_PYTHON" ] || die "No interpreter matches the successful compatibility check. Nothing was installed."
 PLUGIN="${CHANNELLINGO_ROOT:-}/usr/lib/enigma2/python/Plugins/Extensions/ChannelLingo"
 if [ -e "$PLUGIN" ] || [ -L "$PLUGIN" ]; then
     say "ChannelLingo by IET5: an existing installation was found; replacing it automatically."
@@ -99,6 +121,8 @@ elif command -v pidof >/dev/null 2>&1 && pidof enigma2 >/dev/null 2>&1; then
     init 4
     sleep 3
 fi
-sh "$INSTALL"
+# Keep the already verified interpreter after the GUI has stopped. The package
+# still reads its actual ABI and selects/checks the build before replacing files.
+CHANNELLINGO_PYTHON="$INSTALL_PYTHON" sh "$INSTALL"
 say "ChannelLingo installation completed."
 # cleanup restarts Enigma2 if it was running, then removes this run's temporary files.

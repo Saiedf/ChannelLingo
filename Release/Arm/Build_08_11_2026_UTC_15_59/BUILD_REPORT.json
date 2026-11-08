@@ -1,6 +1,6 @@
 {
   "status": "SUCCESS",
-  "run": "Build_08_11_2026_UTC_15_04",
+  "run": "Build_08_11_2026_UTC_15_59",
   "profile": "release",
   "python_targets": [
     "2.7-ucs2",
@@ -132,7 +132,7 @@
   "targets": {
     "py27-dm": {
       "archive": "ChannelLingo-py27-dm.zip",
-      "sha256": "f246610709ac4ebc8c150de26d08ddfdc64f617b56f7974bf32b95ca6be2e5e6",
+      "sha256": "d40eed23b4631a8a2e0d76b544aa77da6b1888de580cdeda30eda852becb7b42",
       "modules": 37,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -145,7 +145,7 @@
     },
     "py27ucs2-aarch64": {
       "archive": "ChannelLingo-py27ucs2-aarch64.zip",
-      "sha256": "5bb323472286baf1d205168915fd079ee401d85929e74da15b763b7500b35f5b",
+      "sha256": "90e3377b806dc1ce594b13d1a71367ea4043c25102ec97277cd26ac7b4f0ab0a",
       "modules": 37,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -158,7 +158,7 @@
     },
     "py27ucs4-armv7l": {
       "archive": "ChannelLingo-py27ucs4-armv7l.zip",
-      "sha256": "1e273a0059ef0ddc86ff9b25ba77e62a492779a5244c1ff684f1a37c0eef1216",
+      "sha256": "920cf9f8b7506a08dc8d91ada5e213f87821353a7796ab888dacdb167b6db80c",
       "modules": 37,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -171,7 +171,7 @@
     },
     "py27ucs4-aarch64": {
       "archive": "ChannelLingo-py27ucs4-aarch64.zip",
-      "sha256": "a08d4e61216aad6501b6e0cdaa90608311cb2e3fedb3f591fdf19f719aea7ebe",
+      "sha256": "858892484c1b367821cebf737b90f94ce35a509236dc9f50348862b2d3b008dd",
       "modules": 37,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -184,7 +184,7 @@
     },
     "py314-dm": {
       "archive": "ChannelLingo-py314-dm.zip",
-      "sha256": "a69a9036ebe99c04a6e6fc75eb1838cab860e2a70e1375e33793df15c8d0115e",
+      "sha256": "2be56c441786fae8993efa9b6ac7babb6cf668f00c7aeac17b9e24ee5bb6fbed",
       "modules": 37,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -197,7 +197,7 @@
     },
     "py314-aarch64": {
       "archive": "ChannelLingo-py314-aarch64.zip",
-      "sha256": "10f48523888dd23697aee7d81fe6922e17d40a61d1dd194db2684bb749e0caa4",
+      "sha256": "24ae52ea95f99fd05604f689753e163d40e6300b2ded6293326085f083b3f719",
       "modules": 37,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -214,18 +214,22 @@
     "Python 2.7 optional crypt.h disabled; ABI layout settings preserved"
   ],
   "protection": "Native compilation, stripped private symbols; reverse engineering remains possible.",
-  "builder_tests": "PASSED (release-boundary tests; see BUILDER_TESTS.txt)",
+  "builder_tests": "PASSED (release-boundary and installer tests; see BUILDER_TESTS.txt)",
+  "help_ui_tests": "PASSED (simulated widgets; see HELP_UI_TESTS.txt)",
   "builder_sha256": {
-    "build_protected.py": "bb04c4d06cb00cedb70aca50590d8a2d0ceb8578a43e1df71188523437b97689",
+    "build_protected.py": "944e4452dc12c81fab3405bc639e18481a5658e5a648bc7d0bfe6f746615165b",
     "detect_enigma_python.py": "9eae83d5e690f343205f0df34d690a869ee70b5efd4ec1b011a00325cbd99282",
     "generate_child.py": "a5f89ed82b0157c8e2ee4a9e9aded0104bd112974cf7616a3eaff0cc67d4d580",
     "verify_behavior.py": "762a102848d6dd540cc0e65b0a7a44c0b8e8006ce27489770005e990b1537ad3",
     "test_builder.py": "f92b215297cd15f88c2d0d75c2243c3509a6e72e6807cb64ad53a488d82b68a2",
-    "test_python_detection.py": "ee026224415382d3b58735ca10c5a24bb91ee45fd8f4b5e4bd120fd40abb483e"
+    "test_python_detection.py": "ee026224415382d3b58735ca10c5a24bb91ee45fd8f4b5e4bd120fd40abb483e",
+    "install_online.sh": "6cbc7183c41512efaddaeb9225bb8af3864c1466e0b095172ec9c1e84ee99927",
+    "test_online_installer.py": "0c0083d531494aa342da372182c3085f3342aafe9d0a66e6a873b33745e75fe7",
+    "test_auto_uninstaller.py": "b71f8d104306ffa239d653f7d37abfc5c086e23ea1c6f473cc4a649e0aa8fb30"
   },
   "universal": {
     "archive": "ChannelLingo-universal.zip",
-    "sha256": "8e296fcf42b6dfcb736435b707579e686d94f501b82c021031da67542366a4ed",
+    "sha256": "30e34aa8276263279d99f5a4062dd9bf16b1d48df484b61879a4acde38015b7d",
     "builds": [
       "py27-dm",
       "py27ucs2-aarch64",

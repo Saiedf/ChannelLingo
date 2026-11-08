@@ -1,6 +1,6 @@
 {
   "status": "SUCCESS",
-  "run": "Build_08_11_2026_UTC_15_16",
+  "run": "Build_08_11_2026_UTC_16_11",
   "profile": "mips-universal",
   "python_targets": [
     "2.7",
@@ -132,7 +132,7 @@
   "targets": {
     "py27-mips": {
       "archive": "ChannelLingo-py27-mips.zip",
-      "sha256": "64f266793dd07b6be903e04e465e1be4da4966d3dbc64c3bf65300815103f473",
+      "sha256": "3e4619e22f7cd9916033c52e367c0cdd374b69acfdb0bd99c9fa8147e6dd20ab",
       "modules": 37,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -145,7 +145,7 @@
     },
     "py27ucs2-mips": {
       "archive": "ChannelLingo-py27ucs2-mips.zip",
-      "sha256": "7148dc09493336a1776472f3c584d0d6e719093f6cc58b607e0e590a221faa2b",
+      "sha256": "86572cdc0dbaa48e3ec0fbed2937a3b7559e56f6bf8e9eea51b906be0bad02c2",
       "modules": 37,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -158,7 +158,7 @@
     },
     "py314-mips": {
       "archive": "ChannelLingo-py314-mips.zip",
-      "sha256": "b8e43a114e69e8d247c75dbf1b731e15d75fd1d0d6666059efdbf88b407c4f30",
+      "sha256": "e23042f6c13a859dab82afb68a577b4406343a6b35cb51bebea9f40123e6b91c",
       "modules": 37,
       "elf_audit": "PASSED",
       "source_leak_check": "PASSED",
@@ -175,18 +175,22 @@
     "Python 2.7 optional crypt.h disabled; ABI layout settings preserved"
   ],
   "protection": "Native compilation, stripped private symbols; reverse engineering remains possible.",
-  "builder_tests": "PASSED (release-boundary tests; see BUILDER_TESTS.txt)",
+  "builder_tests": "PASSED (release-boundary and installer tests; see BUILDER_TESTS.txt)",
+  "help_ui_tests": "PASSED (simulated widgets; see HELP_UI_TESTS.txt)",
   "builder_sha256": {
-    "build_protected.py": "bb04c4d06cb00cedb70aca50590d8a2d0ceb8578a43e1df71188523437b97689",
+    "build_protected.py": "944e4452dc12c81fab3405bc639e18481a5658e5a648bc7d0bfe6f746615165b",
     "detect_enigma_python.py": "9eae83d5e690f343205f0df34d690a869ee70b5efd4ec1b011a00325cbd99282",
     "generate_child.py": "a5f89ed82b0157c8e2ee4a9e9aded0104bd112974cf7616a3eaff0cc67d4d580",
     "verify_behavior.py": "762a102848d6dd540cc0e65b0a7a44c0b8e8006ce27489770005e990b1537ad3",
     "test_builder.py": "f92b215297cd15f88c2d0d75c2243c3509a6e72e6807cb64ad53a488d82b68a2",
-    "test_python_detection.py": "ee026224415382d3b58735ca10c5a24bb91ee45fd8f4b5e4bd120fd40abb483e"
+    "test_python_detection.py": "ee026224415382d3b58735ca10c5a24bb91ee45fd8f4b5e4bd120fd40abb483e",
+    "install_online.sh": "6cbc7183c41512efaddaeb9225bb8af3864c1466e0b095172ec9c1e84ee99927",
+    "test_online_installer.py": "0c0083d531494aa342da372182c3085f3342aafe9d0a66e6a873b33745e75fe7",
+    "test_auto_uninstaller.py": "b71f8d104306ffa239d653f7d37abfc5c086e23ea1c6f473cc4a649e0aa8fb30"
   },
   "universal": {
     "archive": "ChannelLingo-universal.zip",
-    "sha256": "b785d1978cb66b617e8881cefaeb94aee1d1cb1c50e440068f1886480a3f1501",
+    "sha256": "c429e1cdcb6612c35dcc63c3511b38a4f96a95e0de38137d21bec58b19ee6399",
     "builds": [
       "py27-mips",
       "py27ucs2-mips",
