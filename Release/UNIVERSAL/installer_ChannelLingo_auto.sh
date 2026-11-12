@@ -151,25 +151,62 @@ fetch_with_progress() {
     return 1
 }
 
+# For a resumed ZIP, HTTP 416 at EOF is not a network failure. Verify
+# the cached file BEFORE making another Range request.
 fetch_retry() {
     url=$1
     dest=$2
     resume=$3
     attempts=0
     while :; do
+        if [ "$resume" = yes ] && [ -s "$dest" ]; then
+            saved=$(wc -c < "$dest" | tr -d ' ')
+            if [ -n "$TOTAL_BYTES" ]; then
+                if [ "$saved" -eq "$TOTAL_BYTES" ]; then
+                    if checksum_ok; then
+                        say "Download complete: $saved / $TOTAL_BYTES bytes; SHA-256 verified."
+                        return 0
+                    fi
+                    say "Complete-size file failed SHA-256; removing invalid cache and downloading again."
+                    rm -f "$dest" || return 1
+                elif [ "$saved" -gt "$TOTAL_BYTES" ]; then
+                    say "Cached file exceeds expected size; removing invalid cache."
+                    rm -f "$dest" || return 1
+                fi
+            elif checksum_ok; then
+                say "Cached package already passes SHA-256; no download required."
+                return 0
+            fi
+        fi
         attempts=$((attempts + 1))
         say "Download attempt $attempts (no total time limit)..."
-        if { [ "$resume" = yes ] && fetch_with_progress "$url" "$dest" "$resume" || [ "$resume" != yes ] && fetch_once "$url" "$dest" "$resume"; } && [ -s "$dest" ]; then
+        if [ "$resume" = yes ]; then
+            if fetch_with_progress "$url" "$dest" yes; then
+                # Never accept a truncated archive, even if the HTTP client exits 0.
+                if [ -n "$TOTAL_BYTES" ]; then
+                    saved=$(wc -c < "$dest" | tr -d ' ')
+                    if [ "$saved" -eq "$TOTAL_BYTES" ] && checksum_ok; then
+                        say "Download complete; SHA-256 verified."
+                        return 0
+                    fi
+                elif checksum_ok; then
+                    say "Download complete; SHA-256 verified."
+                    return 0
+                fi
+                say "Transfer ended, but archive is incomplete or failed verification."
+            fi
+        elif fetch_once "$url" "$dest" no && [ -s "$dest" ]; then
             return 0
         fi
         if [ -f "$dest" ]; then
             bytes=$(wc -c < "$dest" | tr -d ' ')
-            say "Download interrupted; saved $bytes bytes. Will resume."
+            say "Download not yet verified; saved $bytes bytes."
         fi
         say "Reconnecting in 5 seconds. Press Ctrl+C to stop."
         sleep 5
     done
 }
+
 ZIP="$CACHE_ROOT/ChannelLingo-universal.zip"
 CHECKSUM="$WORK/checksum"
 checksum_ok() {
@@ -208,15 +245,8 @@ else
         say "Resuming existing partial file: $(wc -c < "$ZIP" | tr -d ' ') bytes."
     fi
     fetch_retry "$BASE/ChannelLingo-universal.zip" "$ZIP" yes
-    if ! checksum_ok; then
-        # A fully downloaded but corrupted/obsolete ZIP is not safe to install.
-        # Clear it once and re-fetch the archive, validating the final SHA-256.
-        say "Checksum mismatch. Restarting a clean download once."
-        rm -f "$ZIP"
-        fetch_retry "$BASE/ChannelLingo-universal.zip" "$ZIP" yes
-        checksum_ok || die "Package checksum mismatch after clean download. Nothing installed."
-    fi
 fi
+checksum_ok || die "Package SHA-256 mismatch. Nothing installed."
 say "Package checksum verified."
 cp "$ZIP" "$WORK/ChannelLingo-universal.zip" || die "Cannot stage verified package."
 if [ -n "$PY" ]; then
