@@ -4,16 +4,13 @@ set -eu
 say() { printf '%s\n' "$*"; }
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 [ "$(id -u)" = 0 ] || die "Run this installer as root."
-# jsDelivr mirrors GitHub through a CDN and can be far faster than raw.githubusercontent.com, which some
-# networks throttle heavily - but it caches a branch like "main" only briefly (each new build changes this
-# path), so right after a release it is often an uncached, double-hop fetch that is slower than GitHub
-# directly, not faster. GitHub stays the default first try; jsDelivr is still tried as a second option, since
-# a later install (once jsDelivr's edge has warmed up) may well find it the quicker of the two.
+# jsDelivr was tried here as a second mirror, but it rejects this package outright (HTTP 403): the universal
+# zip bundles every architecture and runs well past jsDelivr's public size limit for a GitHub-sourced file.
+# GitHub raw is the only real option until the package is split small enough for a CDN mirror to carry it.
 if [ -n "${CHANNELLINGO_DOWNLOAD_BASE:-}" ]; then
     BASES=$CHANNELLINGO_DOWNLOAD_BASE
 else
-    BASES="https://raw.githubusercontent.com/Saiedf/ChannelLingo/main/Release/UNIVERSAL
-https://cdn.jsdelivr.net/gh/Saiedf/ChannelLingo@main/Release/UNIVERSAL"
+    BASES="https://raw.githubusercontent.com/Saiedf/ChannelLingo/main/Release/UNIVERSAL"
 fi
 command -v sha256sum >/dev/null 2>&1 || die "sha256sum is required."
 if command -v curl >/dev/null 2>&1; then
@@ -63,17 +60,20 @@ if command -v timeout >/dev/null 2>&1; then
 fi
 fetch() {
     if [ "$FETCH" = curl ]; then
-        # --speed-limit/--speed-time: give up on a mirror that crawls (under 2KB/s for 20s straight)
-        # instead of sitting on one slow source for the full --max-time, so the next mirror gets a turn.
-        set -- curl -fL --retry 2 --connect-timeout 30 --speed-limit 2048 --speed-time 20 --max-time 180 -o "$2" "$1"
+        # --speed-limit/--speed-time: give up on a connection that has truly stalled (under 2KB/s for 20s
+        # straight), independently of --max-time, which only has to be generous enough for the universal
+        # package (tens of MB) to finish on a merely slow but working line, not a dead one. -C -: resume a
+        # retry from where it left off instead of re-downloading everything curl already has.
+        set -- curl -fL -C - --retry 2 --connect-timeout 30 --speed-limit 2048 --speed-time 20 --max-time 1800 -o "$2" "$1"
     else
-        set -- wget -T 20 -O "$2" "$1"
+        set -- wget -c -T 30 -O "$2" "$1"
     fi
-    # Bound the whole transfer too, including a server that keeps sending tiny pieces (wget has no
-    # minimum-speed option of its own, so this outer cap is its only defense against crawling along).
+    # The outer cap is a last-resort ceiling on the whole run, well above what a real transfer needs; curl's
+    # own --speed-limit is what actually catches a mirror that is stuck rather than just slow, and wget (which
+    # has no minimum-speed option) relies on its own -T stall timeout for that instead.
     case "$TIMEOUT_MODE" in
-        modern) timeout 180 "$@" ;;
-        legacy) timeout -t 180 "$@" ;;
+        modern) timeout 1800 "$@" ;;
+        legacy) timeout -t 1800 "$@" ;;
         *) "$@" ;;
     esac
 }
