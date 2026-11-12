@@ -20,6 +20,17 @@ if ! command -v unzip >/dev/null 2>&1; then
     done
     [ -n "$PY" ] || die "unzip or Python is required."
 fi
+# Use persistent receiver storage for interrupted downloads, when available.
+# /tmp remains available for extraction only and is always cleaned.
+CACHE_ROOT=${CHANNELLINGO_CACHE_DIR:-}
+if [ -z "$CACHE_ROOT" ]; then
+    if awk '$2 == "/media/hdd" {found=1} END {exit !found}' /proc/mounts 2>/dev/null && [ -d /media/hdd ]; then
+        CACHE_ROOT=/media/hdd/.channellingo-installer-cache
+    else
+        CACHE_ROOT=/tmp/.channellingo-installer-cache
+    fi
+fi
+mkdir -p "$CACHE_ROOT" || die "Cannot create persistent download cache."
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/channellingo-install-XXXXXX") || die "Cannot create temporary folder."
 RESTART=""
 restart_gui() {
@@ -42,7 +53,7 @@ cleanup() {
 }
 trap cleanup EXIT
 trap 'exit 1' HUP INT TERM
-# BusyBox images may use "timeout -t SECONDS", while GNU/new BusyBox use "timeout SECONDS".
+# Per-attempt timeout limits stalled transfers without losing the partial file.
 TIMEOUT_MODE=none
 if command -v timeout >/dev/null 2>&1; then
     if timeout 1 sh -c 'exit 0' >/dev/null 2>&1; then
@@ -51,29 +62,75 @@ if command -v timeout >/dev/null 2>&1; then
         TIMEOUT_MODE=legacy
     fi
 fi
-fetch() {
+fetch_once() {
+    url=$1
+    dest=$2
+    resume=$3
     if [ "$FETCH" = curl ]; then
-        set -- curl -fL --retry 2 --connect-timeout 30 --max-time 900 -o "$2" "$1"
+        if [ "$resume" = yes ]; then
+            set -- curl -fL --connect-timeout 15 --max-time 180 --speed-limit 1024 --speed-time 45 -C - -o "$dest" "$url"
+        else
+            set -- curl -fL --connect-timeout 15 --max-time 90 -o "$dest" "$url"
+        fi
     else
-        set -- wget -T 30 -O "$2" "$1"
+        if [ "$resume" = yes ]; then
+            set -- wget -c -T 25 -O "$dest" "$url"
+        else
+            set -- wget -T 25 -O "$dest" "$url"
+        fi
     fi
-    # Bound the whole transfer too, including a server that keeps sending tiny pieces.
     case "$TIMEOUT_MODE" in
-        modern) timeout 900 "$@" ;;
-        legacy) timeout -t 900 "$@" ;;
+        modern) timeout 180 "$@" ;;
+        legacy) timeout -t 180 "$@" ;;
         *) "$@" ;;
     esac
 }
+fetch_retry() {
+    url=$1 dest=$2 resume=$3
+    attempt=1
+    while [ "$attempt" -le 12 ]; do
+        say "Download attempt $attempt/12 ..."
+        if fetch_once "$url" "$dest" "$resume"; then
+            [ -s "$dest" ] && return 0
+        fi
+        if [ -f "$dest" ]; then
+            bytes=$(wc -c < "$dest" | tr -d ' ')
+            say "Partial file preserved: $bytes bytes."
+        fi
+        attempt=$((attempt + 1))
+        [ "$attempt" -le 12 ] && sleep 3
+    done
+    return 1
+}
+ZIP="$CACHE_ROOT/ChannelLingo-universal.zip"
+CHECKSUM="$WORK/checksum"
 say "ChannelLingo by IET5 - automatic download and installation"
-say "Downloading the universal package..."
-fetch "$BASE/ChannelLingo-universal.zip" "$WORK/ChannelLingo-universal.zip" || die "Download failed. Check internet access and that the repository is public."
-fetch "$BASE/ChannelLingo-universal.zip.sha256" "$WORK/checksum" || die "Cannot download the package checksum."
-EXPECTED=$(awk 'NR == 1 {print $1}' "$WORK/checksum")
+say "Download cache: $CACHE_ROOT"
+say "Downloading package checksum..."
+fetch_retry "$BASE/ChannelLingo-universal.zip.sha256" "$CHECKSUM" no || die "Cannot download package checksum."
+EXPECTED=$(awk 'NR == 1 {print $1}' "$CHECKSUM")
 [ "${#EXPECTED}" = 64 ] || die "Invalid checksum file."
 case "$EXPECTED" in *[!0-9a-fA-F]*) die "Invalid checksum file." ;; esac
-ACTUAL=$(sha256sum "$WORK/ChannelLingo-universal.zip")
-ACTUAL=${ACTUAL%% *}
-[ "$EXPECTED" = "$ACTUAL" ] || die "Package checksum mismatch. Nothing was installed."
+checksum_ok() {
+    [ -s "$ZIP" ] || return 1
+    ACTUAL=$(sha256sum "$ZIP")
+    ACTUAL=${ACTUAL%% *}
+    [ "$EXPECTED" = "$ACTUAL" ]
+}
+if checksum_ok; then
+    say "Previously downloaded package is valid; skipping download."
+else
+    say "Downloading the universal package (resumable)..."
+    fetch_retry "$BASE/ChannelLingo-universal.zip" "$ZIP" yes || die "Download interrupted. Partial file kept in $ZIP; rerun to resume."
+    if ! checksum_ok; then
+        say "Checksum mismatch: retrying once from a clean download."
+        rm -f "$ZIP"
+        fetch_retry "$BASE/ChannelLingo-universal.zip" "$ZIP" yes || die "Download interrupted. Partial file preserved; rerun to resume."
+        checksum_ok || die "Package checksum mismatch after clean download. Nothing was installed."
+    fi
+fi
+# Extraction and installation always use the verified archive.
+cp "$ZIP" "$WORK/ChannelLingo-universal.zip" || die "Cannot copy verified package to temporary directory."
 say "Package checksum verified."
 if [ -n "$PY" ]; then
     "$PY" -m zipfile -e "$WORK/ChannelLingo-universal.zip" "$WORK"
