@@ -40,6 +40,9 @@ mkdir -p "$CACHE_ROOT" || die "Cannot create download cache."
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/channellingo-install-XXXXXX") || die "Cannot create temporary folder."
 RESTART=""
 DOWNLOAD_PID=""
+PACKAGE_SOURCE="unknown"
+INITIAL_CACHED_BYTES=0
+INSTALL_SUCCESS=no
 restart_gui() {
     case "$RESTART" in
         systemctl) systemctl start enigma2.service ;;
@@ -60,6 +63,21 @@ cleanup() {
         fi
     fi
     rm -rf "$WORK"
+    if [ "$result" -eq 0 ] && [ "$INSTALL_SUCCESS" = yes ]; then
+        # Remove only ChannelLingo download artifacts, not a user-selected
+        # cache directory or unrelated files that may exist in it.
+        if rm -f "$ZIP" "$CACHE_ROOT/.cache-created-at"; then
+            say "Download cache cleared after successful installation: $ZIP"
+        else
+            say "WARNING: Could not remove downloaded ZIP cache: $ZIP" >&2
+        fi
+        say "============================================================"
+        say "SUCCESS: ChannelLingo installed successfully."
+        say "Installation status: SUCCESS (exit code 0)"
+        say "============================================================"
+    elif [ "$result" -ne 0 ]; then
+        say "FAILED: ChannelLingo installer exited with code $result." >&2
+    fi
     exit "$result"
 }
 trap cleanup EXIT
@@ -209,6 +227,8 @@ fetch_retry() {
 
 ZIP="$CACHE_ROOT/ChannelLingo-universal.zip"
 CHECKSUM="$WORK/checksum"
+# Cache is ONLY for resuming interrupted downloads. A successful installation
+# clears the completed ZIP. On failure, preserve partial/verified ZIP for retry.
 checksum_ok() {
     [ -s "$ZIP" ] || return 1
     ACTUAL=$(sha256sum "$ZIP") || return 1
@@ -231,7 +251,10 @@ fetch_retry "$BASE/ChannelLingo-universal.zip.sha256" "$CHECKSUM" no
 EXPECTED=$(awk 'NR == 1 {print $1}' "$WORK/checksum")
 [ "${#EXPECTED}" = 64 ] || die "Invalid checksum file."
 case "$EXPECTED" in *[!0-9a-fA-F]*) die "Invalid checksum file." ;; esac
+INITIAL_CACHED_BYTES=0
+[ ! -f "$ZIP" ] || INITIAL_CACHED_BYTES=$(wc -c < "$ZIP" | tr -d ' ')
 if checksum_ok; then
+    PACKAGE_SOURCE="verified cache (no ZIP download this run)"
     say "Cached package already verified. Skipping download."
 else
     say "Downloading universal package with automatic resume (no total time limit)..."
@@ -245,8 +268,23 @@ else
         say "Resuming existing partial file: $(wc -c < "$ZIP" | tr -d ' ') bytes."
     fi
     fetch_retry "$BASE/ChannelLingo-universal.zip" "$ZIP" yes
+    PACKAGE_SOURCE="downloaded/resumed from GitHub"
 fi
 checksum_ok || die "Package SHA-256 mismatch. Nothing installed."
+PACKAGE_BYTES=$(wc -c < "$ZIP" | tr -d ' ')
+PACKAGE_MIB=$(awk -v n="$PACKAGE_BYTES" 'BEGIN {printf "%.2f", n/1048576}')
+INITIAL_MIB=$(awk -v n="$INITIAL_CACHED_BYTES" 'BEGIN {printf "%.2f", n/1048576}')
+say "------------------------------------------------------------"
+say "PACKAGE DOWNLOAD SUMMARY"
+say "File: ChannelLingo-universal.zip"
+say "Total package size: $PACKAGE_BYTES bytes ($PACKAGE_MIB MiB)"
+say "Cache bytes found at start: $INITIAL_CACHED_BYTES ($INITIAL_MIB MiB)"
+say "Source this run: $PACKAGE_SOURCE"
+say "Cache directory: $CACHE_ROOT"
+say "Cache policy: delete after successful installation; retain on failure/interruption"
+say "Download progress: 100% | Remaining: 0 bytes"
+say "SHA-256 integrity: VERIFIED (PASS)"
+say "------------------------------------------------------------"
 say "Package checksum verified."
 cp "$ZIP" "$WORK/ChannelLingo-universal.zip" || die "Cannot stage verified package."
 if [ -n "$PY" ]; then
@@ -299,4 +337,9 @@ fi
 # still reads its actual ABI and selects/checks the build before replacing files.
 CHANNELLINGO_PYTHON="$INSTALL_PYTHON" sh "$INSTALL"
 say "ChannelLingo installation completed."
+INSTALL_SUCCESS=yes
+say "Installed build: $INSTALL_PYTHON ($EXPECTED_FACTS)"
+say "Installed plugin path: $PLUGIN"
+say "Package verified: $PACKAGE_MIB MiB; $PACKAGE_SOURCE"
+say "Cache policy: completed ZIP will be removed after successful installation and GUI restart."
 # cleanup restarts Enigma2 if it was running, then removes this run's temporary files.
