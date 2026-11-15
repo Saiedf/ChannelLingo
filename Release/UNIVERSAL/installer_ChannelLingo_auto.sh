@@ -4,6 +4,42 @@ set -eu
 say() { printf '%s\n' "$*"; }
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 [ "$(id -u)" = 0 ] || die "Run this installer as root."
+# Boot and multiboot protection: operate on the current root filesystem only.
+# Refuse alternate roots that could redirect installation into a Barry Allen image.
+case "${CHANNELLINGO_ROOT:-}" in
+    ""|/) : ;;
+    *) die "Boot protection: CHANNELLINGO_ROOT must be unset or /. Alternate image roots are forbidden." ;;
+esac
+# Guard the selected plugin directory against symbolic-link redirection.
+# readlink -f is available on typical BusyBox receivers.
+PLUGIN_PARENT=/usr/lib/enigma2/python/Plugins/Extensions
+PLUGIN_FIXED="$PLUGIN_PARENT/ChannelLingo"
+if [ -L "$PLUGIN_FIXED" ]; then
+    die "Boot protection: plugin directory is a symlink; refusing to follow it."
+fi
+command -v readlink >/dev/null 2>&1 || die "readlink is required for boot-path protection."
+plugin_parent=$(readlink -f "$PLUGIN_PARENT" 2>/dev/null) || die "Cannot resolve plugin parent."
+[ "$plugin_parent" = "$PLUGIN_PARENT" ] || die "Boot protection: plugin parent redirects to $plugin_parent"
+# Refuse temporary/cache directories under boot or Barry Allen image storage.
+# This matters because the installer removes its own temporary work directory.
+guard_storage_root() {
+    candidate=$1
+    case "$candidate" in
+        /*) : ;;
+        *) die "Boot protection: storage location must be an absolute path: $candidate" ;;
+    esac
+    case "$candidate" in
+        /|/boot|/boot/*|/ba|/ba/*|/media/ba|/media/ba/*|/media/flash|/media/flash/*|/dev|/dev/*|/proc|/proc/*|/sys|/sys/*)
+            die "Boot protection: unsafe storage location: $candidate" ;;
+    esac
+    if command -v readlink >/dev/null 2>&1; then
+        resolved=$(readlink -f "$candidate" 2>/dev/null) || die "Cannot resolve storage path: $candidate"
+        case "$resolved" in
+            /|/boot|/boot/*|/ba|/ba/*|/media/ba|/media/ba/*|/media/flash|/media/flash/*|/dev|/dev/*|/proc|/proc/*|/sys|/sys/*)
+                die "Boot protection: storage redirects to protected path: $resolved" ;;
+        esac
+    fi
+}
 # jsDelivr was tried here as a second mirror, but it rejects this package outright (HTTP 403): the universal
 # zip bundles every architecture and runs well past jsDelivr's public size limit for a GitHub-sourced file.
 # GitHub raw is the only real option until the package is split small enough for a CDN mirror to carry it.
@@ -20,13 +56,16 @@ elif command -v wget >/dev/null 2>&1; then
 else
     die "curl or wget is required."
 fi
-PY=""
-if ! command -v unzip >/dev/null 2>&1; then
-    for candidate in python3 python python2; do
-        if command -v "$candidate" >/dev/null 2>&1; then PY=$candidate; break; fi
-    done
-    [ -n "$PY" ] || die "unzip or Python is required."
-fi
+# Validate all ZIP entries before extraction, using the image's Python 2.7/3.x.
+ARCHIVE_PYTHON=""
+for candidate in python3 python python2; do
+    command -v "$candidate" >/dev/null 2>&1 || continue
+    if "$candidate" -S -c 'import sys, zipfile, stat; sys.exit(0)' >/dev/null 2>&1; then
+        ARCHIVE_PYTHON=$candidate
+        break
+    fi
+done
+[ -n "$ARCHIVE_PYTHON" ] || die "Python with zipfile is required for safe extraction."
 # Persistent download cache: reuse the partial file from earlier installer runs.
 CACHE_ROOT=${CHANNELLINGO_CACHE_DIR:-}
 if [ -z "$CACHE_ROOT" ]; then
@@ -36,8 +75,18 @@ if [ -z "$CACHE_ROOT" ]; then
         CACHE_ROOT=/tmp/.channellingo-installer-cache
     fi
 fi
+# Resolve and validate the cache and scratch roots BEFORE creating anything.
+# Cache location may not already exist; normalize via its existing parent.
+cache_parent=$(dirname "$CACHE_ROOT")
+guard_storage_root "$cache_parent"
+guard_storage_root "$CACHE_ROOT"
+guard_storage_root "${TMPDIR:-/tmp}"
 mkdir -p "$CACHE_ROOT" || die "Cannot create download cache."
-WORK=$(mktemp -d "${TMPDIR:-/tmp}/channellingo-install-XXXXXX") || die "Cannot create temporary folder."
+guard_storage_root "$CACHE_ROOT"
+TEMP_ROOT=${TMPDIR:-/tmp}
+guard_storage_root "$TEMP_ROOT"
+WORK=$(mktemp -d "$TEMP_ROOT/channellingo-install-XXXXXX") || die "Cannot create temporary folder."
+guard_storage_root "$WORK"
 RESTART=""
 DOWNLOAD_PID=""
 PACKAGE_SOURCE="unknown"
@@ -62,7 +111,14 @@ cleanup() {
             result=1
         fi
     fi
-    rm -rf "$WORK"
+    # Only delete the exact temporary directory created by mktemp.
+    case "$WORK" in
+        "$TEMP_ROOT"/channellingo-install-*)
+            if [ -d "$WORK" ] && [ ! -L "$WORK" ]; then
+                rm -rf -- "$WORK"
+            fi ;;
+        *) say "WARNING: refused unsafe workdir cleanup: $WORK" >&2 ;;
+    esac
     if [ "$result" -eq 0 ] && [ "$INSTALL_SUCCESS" = yes ]; then
         # Remove only ChannelLingo download artifacts, not a user-selected
         # cache directory or unrelated files that may exist in it.
@@ -226,6 +282,7 @@ fetch_retry() {
 }
 
 ZIP="$CACHE_ROOT/ChannelLingo-universal.zip"
+[ ! -L "$ZIP" ] || die "Boot protection: cached ZIP is a symlink."
 CHECKSUM="$WORK/checksum"
 # Cache is ONLY for resuming interrupted downloads. A successful installation
 # clears the completed ZIP. On failure, preserve partial/verified ZIP for retry.
@@ -287,13 +344,75 @@ say "SHA-256 integrity: VERIFIED (PASS)"
 say "------------------------------------------------------------"
 say "Package checksum verified."
 cp "$ZIP" "$WORK/ChannelLingo-universal.zip" || die "Cannot stage verified package."
-if [ -n "$PY" ]; then
-    "$PY" -m zipfile -e "$WORK/ChannelLingo-universal.zip" "$WORK"
-else
-    unzip -q "$WORK/ChannelLingo-universal.zip" -d "$WORK"
+if ! "$ARCHIVE_PYTHON" -S - "$WORK/ChannelLingo-universal.zip" "$WORK" <<'CHANNELLINGO_SAFE_EXTRACT'
+from __future__ import print_function
+import re
+import stat
+import sys
+import zipfile
+
+try:
+    with zipfile.ZipFile(sys.argv[1], 'r') as archive:
+        seen = set()
+        plugin = 'usr/lib/enigma2/python/Plugins/Extensions/ChannelLingo'
+        metadata = ('install.sh', 'uninstall.sh', 'README.txt', 'VARIANTS.txt', 'SHA256SUMS')
+        for entry in archive.infolist():
+            name = entry.filename
+            parts = name.rstrip('/').split('/')
+            if (not name or name.startswith('/') or '\\' in name or
+                    any(part in ('', '.', '..', 'boot', '.bainfo', '.bainfotmp') for part in parts)):
+                raise ValueError('unsafe archive path: ' + name)
+            if name in seen:
+                raise ValueError('duplicate archive path: ' + name)
+            seen.add(name)
+            kind = stat.S_IFMT(entry.external_attr >> 16)
+            if kind not in (0, stat.S_IFREG, stat.S_IFDIR):
+                raise ValueError('links and special files are forbidden: ' + name)
+            if parts[0] != 'ChannelLingo-universal':
+                raise ValueError('unexpected archive root: ' + name)
+            tail = parts[1:]
+            allowed = not tail and name.endswith('/')
+            if len(tail) == 1 and tail[0] in metadata:
+                allowed = not name.endswith('/')
+            if tail and tail[0] in ('resources', 'variants'):
+                content = tail[1:]
+                if tail[0] == 'variants' and content:
+                    label = content.pop(0)
+                    if not re.match(r'^[A-Za-z0-9][A-Za-z0-9_-]*$', label):
+                        raise ValueError('unsafe variant name: ' + name)
+                    if content in (['PACKAGE_MANIFEST.json'], ['INSTALL.txt']):
+                        allowed = not name.endswith('/')
+                relative = '/'.join(content)
+                if (relative == plugin or relative.startswith(plugin + '/') or
+                        (name.endswith('/') and (not relative or plugin.startswith(relative + '/')))):
+                    allowed = True
+            if not allowed:
+                raise ValueError('entry outside the plugin package: ' + name)
+        if 'ChannelLingo-universal/install.sh' not in seen:
+            raise ValueError('archive has no universal installer')
+        archive.extractall(sys.argv[2])
+except Exception as error:
+    print('Boot protection: invalid package: %s' % error, file=sys.stderr)
+    sys.exit(1)
+CHANNELLINGO_SAFE_EXTRACT
+then
+    die "Archive validation/extraction failed; nothing was installed."
 fi
 INSTALL="$WORK/ChannelLingo-universal/install.sh"
 [ -f "$INSTALL" ] || die "The archive has no installer."
+# Inspect the extracted inner installer BEFORE even running its --check mode.
+# This is a conservative safety gate, not a sandbox: never execute unknown
+# installation code without separately reviewing the universal package.
+# Reject direct references to multiboot metadata, boot partitions and low-level
+# image/flash operations. Remove comments from this check to avoid false matches.
+if sed '/^[[:space:]]*#/d' "$INSTALL" | grep -nEi '(/boot|/media/ba|/ba/ba|\.bainfo|\.bainfotmp|fw_setenv|flash_erase|nandwrite|(^|[[:space:];|])(mkfs|dd|mount|umount|reboot)([[:space:];|]|$))' >/dev/null; then
+    die "Boot protection: inner install.sh contains boot/multiboot/partition operations; installation aborted for review."
+fi
+# Refuse any packaged entry targeting a boot or Barry Allen directory directly.
+# This is a path-name guard, not a full audit of arbitrary executed code.
+if find "$WORK/ChannelLingo-universal" \( -name .bainfo -o -name .bainfotmp -o -name boot \) -print | grep -q .; then
+    die "Boot protection: package contains boot or Barry Allen metadata paths; installation aborted."
+fi
 # Check compatibility while Enigma2 is running: some images load libpython
 # dynamically, so its ELF dependencies alone cannot identify Python after init 4.
 PREFLIGHT=$(sh "$INSTALL" --check) || die "Compatibility check failed; nothing was installed."
@@ -318,7 +437,7 @@ print("This receiver: Python %d.%d (%s), %d-bit, processor %s." %
     fi
 done
 [ -n "$INSTALL_PYTHON" ] || die "No interpreter matches the successful compatibility check. Nothing was installed."
-PLUGIN="${CHANNELLINGO_ROOT:-}/usr/lib/enigma2/python/Plugins/Extensions/ChannelLingo"
+PLUGIN="$PLUGIN_FIXED"
 if [ -e "$PLUGIN" ] || [ -L "$PLUGIN" ]; then
     say "ChannelLingo by IET5: an existing installation was found; replacing it automatically."
 else
