@@ -66,25 +66,45 @@ for candidate in python3 python python2; do
     fi
 done
 [ -n "$ARCHIVE_PYTHON" ] || die "Python with zipfile is required for safe extraction."
+# /media/hdd (a mounted drive, typically much larger than the receiver's own root/tmpfs) is
+# preferred, both for the persistent download cache and for the scratch extraction work below:
+# the archive is validated and unpacked in full before anything is installed, and that needs
+# roughly twice the package size free. The receiver's own /tmp is often a small tmpfs.
+large_storage_root() {
+    if [ -d /media/hdd ] && awk '$2 == "/media/hdd" {found=1} END {exit !found}' /proc/mounts 2>/dev/null; then
+        if command -v df >/dev/null 2>&1; then
+            # Compare actual free space; a mounted drive is not always the bigger one.
+            tmp_free=$(df -Pk /tmp 2>/dev/null | awk 'NR==2 {print $4}')
+            hdd_free=$(df -Pk /media/hdd 2>/dev/null | awk 'NR==2 {print $4}')
+            case "$tmp_free" in ''|*[!0-9]*) tmp_free=0 ;; esac
+            case "$hdd_free" in ''|*[!0-9]*) hdd_free=0 ;; esac
+            if [ "$hdd_free" -gt "$tmp_free" ]; then
+                printf '%s\n' /media/hdd
+            else
+                printf '%s\n' /tmp
+            fi
+        else
+            # No way to compare; a mounted drive is still the safer default over a small tmpfs.
+            printf '%s\n' /media/hdd
+        fi
+    else
+        printf '%s\n' /tmp
+    fi
+}
 # Persistent download cache: reuse the partial file from earlier installer runs.
 CACHE_ROOT=${CHANNELLINGO_CACHE_DIR:-}
 if [ -z "$CACHE_ROOT" ]; then
-    if [ -d /media/hdd ] && awk '$2 == "/media/hdd" {found=1} END {exit !found}' /proc/mounts 2>/dev/null; then
-        CACHE_ROOT=/media/hdd/.channellingo-installer-cache
-    else
-        CACHE_ROOT=/tmp/.channellingo-installer-cache
-    fi
+    CACHE_ROOT=$(large_storage_root)/.channellingo-installer-cache
 fi
 # Resolve and validate the cache and scratch roots BEFORE creating anything.
 # Cache location may not already exist; normalize via its existing parent.
 cache_parent=$(dirname "$CACHE_ROOT")
 guard_storage_root "$cache_parent"
 guard_storage_root "$CACHE_ROOT"
-guard_storage_root "${TMPDIR:-/tmp}"
+TEMP_ROOT=${TMPDIR:-$(large_storage_root)}
+guard_storage_root "$TEMP_ROOT"
 mkdir -p "$CACHE_ROOT" || die "Cannot create download cache."
 guard_storage_root "$CACHE_ROOT"
-TEMP_ROOT=${TMPDIR:-/tmp}
-guard_storage_root "$TEMP_ROOT"
 WORK=$(mktemp -d "$TEMP_ROOT/channellingo-install-XXXXXX") || die "Cannot create temporary folder."
 guard_storage_root "$WORK"
 RESTART=""
@@ -148,7 +168,7 @@ fetch_once() {
         if [ "$resume" = yes ]; then
             # -C - resumes at the size of the existing partial file.
             # --speed-time is not a total duration limit: it only detects stalls.
-            curl -fL --connect-timeout 30 --speed-limit 1024 --speed-time 60 -C - -o "$dest" "$url"
+            curl -fsSL --connect-timeout 30 --speed-limit 1024 --speed-time 60 -C - -o "$dest" "$url"
         else
             curl -fsSL --connect-timeout 30 --speed-limit 1024 --speed-time 60 -o "$dest" "$url"
         fi
