@@ -197,7 +197,7 @@ get_total_bytes() {
         curl -fsSL --connect-timeout 30 --speed-limit 1024 --speed-time 60 \
             -r 0-0 -D "$hdr" -o /dev/null "$url" || return 0
     else
-        wget -q -S --header='Range: bytes=0-0' -O /dev/null "$url" 2> "$hdr" || return 0
+        wget -q -S -T 60 --header='Range: bytes=0-0' -O /dev/null "$url" 2> "$hdr" || return 0
     fi
     found=$(awk 'tolower($0) ~ /^content-range:/ {gsub("\r", "", $0); split($0, a, "/"); n=a[2]; if (n ~ /^[0-9]+$/) last=n} END {print last}' "$hdr")
     case "$found" in ''|*[!0-9]*) ;; *) TOTAL_BYTES=$found ;; esac
