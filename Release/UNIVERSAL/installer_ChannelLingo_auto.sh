@@ -33,7 +33,14 @@ guard_storage_root() {
             die "Boot protection: unsafe storage location: $candidate" ;;
     esac
     if command -v readlink >/dev/null 2>&1; then
-        resolved=$(readlink -f "$candidate" 2>/dev/null) || die "Cannot resolve storage path: $candidate"
+        resolved=$(readlink -f "$candidate" 2>/dev/null) || true
+        if [ -z "$resolved" ]; then
+            # Candidate does not exist yet (not created until later). Some BusyBox
+            # readlink builds cannot canonicalize a missing leaf component, so fall
+            # back to resolving the existing parent and reattaching the leaf name.
+            parent_resolved=$(readlink -f "$(dirname "$candidate")" 2>/dev/null) || die "Cannot resolve storage path: $candidate"
+            resolved="$parent_resolved/$(basename "$candidate")"
+        fi
         case "$resolved" in
             /|/boot|/boot/*|/ba|/ba/*|/media/ba|/media/ba/*|/media/flash|/media/flash/*|/dev|/dev/*|/proc|/proc/*|/sys|/sys/*)
                 die "Boot protection: storage redirects to protected path: $resolved" ;;
